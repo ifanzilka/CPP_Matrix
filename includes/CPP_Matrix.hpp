@@ -1,6 +1,9 @@
 #ifndef CPP_MATRIX_HPP
 # define CPP_MATRIX_HPP
 
+#include <cmath>
+#include <cstring>
+#include <iostream>
 
 namespace ft
 {
@@ -35,7 +38,7 @@ namespace ft
 
 
         /* Destructors */
-        ~Matrix();             // Destructor
+        ~Matrix();
 
     };
 
