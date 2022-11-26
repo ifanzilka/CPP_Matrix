@@ -100,7 +100,7 @@ namespace ft
         {
             throw std::out_of_range("Incorrect input, matrices should have the same size");
         }
-        else if (this->matrix_ == nullptr && other.matrix_ == nullptr)
+        else if (this->_matrix == nullptr && other._matrix == nullptr)
         {
             throw std::out_of_range("Incorrect input, matrix empty");
         }
@@ -123,7 +123,7 @@ namespace ft
         {
             throw std::out_of_range("Incorrect input, matrices should have the same size");
         }
-        else if (this->matrix_ == nullptr && other.matrix_ == nullptr)
+        else if (this->_matrix == nullptr && other._matrix == nullptr)
         {
             throw std::out_of_range("Incorrect input, matrix empty");
         }
@@ -202,4 +202,83 @@ namespace ft
         return (result);
     }
 
+    Matrix  Matrix::MinorMinor(int row, int col)
+    {
+        Matrix result(this->_rows - 1, this->_cols - 1);
+
+        for (int i = 0, x = 0; i < this->_rows; ++i)
+        {
+            if (row != i)
+            {
+                for (int j = 0, y = 0; j < this->_cols; ++j)
+                {
+                    if (col != j)
+                    {
+                        result._matrix[x][y] = this->_matrix[i][j];
+                        y++;
+                    }
+                }
+                x++;   
+            }
+        }
+        return (result);
+    }
+
+    double  Matrix::Determinant()
+    {
+        Matrix minor;
+        double result = 0;
+        double determinant_minor;
+
+        if ((_cols < 1 || _rows < 1) || (_rows != _cols))
+        {
+            throw std::out_of_range("Incorrect input");
+        }
+        if (_cols == 1)
+        {
+            return (_matrix[0][0]);
+        }
+        else
+        {
+            for (int i = 0; i < this->_cols; i++)
+            {
+                minor = MinorMinor(i, 0);  // чтобы не брать [i][0] элемент, то есть первые элементы строки
+                determinant_minor = minor.Determinant();
+
+                determinant_minor = this->_matrix[i][0] * determinant_minor;
+
+                if ((2 + i) % 2 == 1)
+                    determinant_minor *= (-1);
+
+                /* res = (-1)^(i)  + det(minor(i, i))*/
+                result += determinant_minor;                
+            }
+        }
+
+        return (result);
+
+    }
+
+
+
+    Matrix  Matrix::CalcComplements()
+    {
+        Matrix result(_rows, _cols);
+
+        if ((_rows != _cols) || _rows < 1 || _cols < 1)
+        {
+            throw std::out_of_range("Incorrect input");
+        }
+        for (int i = 0; i < _rows; i++)
+        {
+            for (int j = 0; j < _cols; j++)
+            {
+                double determinant = 0.0;
+                minor = MinorMinor(i, j);
+                determinant = minor.determinant();
+                result._matrix[i][j] = pow(-1, i + j) * determinant;
+            }
+        }
+        return (result);
+    }
 }

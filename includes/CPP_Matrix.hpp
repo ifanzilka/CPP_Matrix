@@ -32,8 +32,10 @@ namespace ft
         void    MulMatrix(const Matrix& other);
         Matrix  T();
         Matrix  Transpose();
-        Matrix  CalcComplements();
+        Matrix  MinorMinor(int row, int col);
         double  Determinant();
+        Matrix  CalcComplements();
+        
         Matrix  InverseMatrix();
 
 
