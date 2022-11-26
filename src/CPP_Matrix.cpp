@@ -94,4 +94,69 @@ namespace ft
         return result;
     }
 
+    void Matrix::SumMatrix(const Matrix& other)
+    {
+        if (this->_rows != other._rows || this->_cols != other._cols)
+        {
+            throw std::out_of_range("Incorrect input, matrices should have the same size");
+        }
+        else if (this->matrix_ == nullptr && other.matrix_ == nullptr)
+        {
+            throw std::out_of_range("Incorrect input, matrix empty");
+        }
+        else
+        {
+            for (int i = 0; i < this->_rows; i++)
+            {
+                for (int j = 0; j < this->_cols; j++)
+                {
+                    this->_matrix[i][j] += other._matrix[i][j];
+                }
+            }
+        }
+
+    }
+
+    void Matrix::SubMatrix(const Matrix& other)
+    {
+        if (this->_rows != other._rows || this->_cols != other._cols)
+        {
+            throw std::out_of_range("Incorrect input, matrices should have the same size");
+        }
+        else if (this->matrix_ == nullptr && other.matrix_ == nullptr)
+        {
+            throw std::out_of_range("Incorrect input, matrix empty");
+        }
+        else
+        {
+            for (int i = 0; i < this->_rows; i++)
+            {
+                for (int j = 0; j < this->_cols; j++)
+                {
+                    this->_matrix[i][j] -= other._matrix[i][j];
+                }
+            }
+        }
+        
+    }
+
+
+    void Matrix::MulNumber(const double num)
+    {
+
+        for (int i = 0; i < this->_rows; i++)
+        {
+            for (int j = 0; j < this->_cols; j++)
+            {
+                this->_matrix[i][j] *= num;
+            }
+        }
+        
+    }
+
+    void Matrix::MulMatrix(const Matrix& other)
+    {
+        
+    }
+
 }
