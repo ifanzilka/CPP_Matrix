@@ -156,6 +156,40 @@ namespace ft
 
     void Matrix::MulMatrix(const Matrix& other)
     {
+        if (this->_rows != other._cols)
+        {
+            throw std::out_of_range("the number of rows of the first matrix must be equal to the number of "
+            "columns of the second matrix");
+        }
+        else if (!this->_matrix || !other._matrix)
+        {
+            throw std::out_of_range("Incorrect input, matrix empty");
+        }
+        else
+        {
+            Matrix result(other._cols, this->_rows);
+            for (int i = 0; i < this->_rows; i++)
+            {
+                for (int j = 0; j < other._cols; j++)
+                {
+                    for (int k = 0; k < this->_cols; k++)
+                    {
+                        result._matrix[i][j] += this->_matrix[i][k] * other._matrix[k][j];
+                    }
+                }
+            }
+            for (int i = 0; i < this->_rows; i++)
+            {
+                for (int j = 0; j < other._cols; j++)
+                {
+                    this->_matrix[i][j] = result._matrix[i][j];
+                }
+            }
+        }
+  }
+
+
+
         
     }
 
