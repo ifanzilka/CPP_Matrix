@@ -186,11 +186,20 @@ namespace ft
                 }
             }
         }
-  }
+    }
 
-
-
+    Matrix  Matrix::Transpose()
+    {
+        Matrix result(_rows, _cols);
         
+        for (int i = 0; i < _rows; i++)
+        {
+            for (int j = 0; j < _cols; j++)
+            {
+                result._matrix[j][i] = _matrix[i][j];
+            }
+        }
+        return (result);
     }
 
 }
