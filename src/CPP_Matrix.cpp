@@ -7,6 +7,7 @@ namespace ft
     {
         _rows = 0;
         _cols = 0;
+        _matrix = NULL;
     }
 
     Matrix::Matrix(int rows, int cols)
@@ -15,33 +16,38 @@ namespace ft
         {
             throw std::out_of_range("Invalid size of rows or columns");
         }
-        _rows = rows;
-        _cols = cols;
-        create_matrix();
+        AllocateMatrix(rows, cols);
     }
 
+    /* */
+
+    // Конструктор копирования
+    Matrix::Matrix(const Matrix& other): _rows(other._rows), _cols(other._cols)
+    {
+        AllocateMatrix(other._rows, other._cols);
+        CopyMatrix(other);
+    }
 
     /* Destructors */
     Matrix::~Matrix()
     {
-        clear_matrix();
+        FreeMatrix();
     }
 
     /* utils */
 
-    void Matrix::create_matrix()
+    void    Matrix::AllocateMatrix(int rows, int cols)
     {
-        if (!this->_rows || !this->_cols)
+        if (cols <= 0 || rows <= 0)
             throw std::length_error("Rows is less or equal 0");
+        this->_rows = rows;
+        this->_cols = cols;
         this->_matrix = new double *[_rows];
-  
-  
         for (int i = 0; i < _rows; i++)
         {
             _matrix[i] = new double[_cols];
         }
-
-        /* zero */
+         /* zero */
         for (int i = 0; i < _rows; i++)
         {
             for (int j = 0; j < _cols; j++)
@@ -49,12 +55,14 @@ namespace ft
                 _matrix[i][j] = 0;
             }
         }
+
+
     }
 
 
-    void Matrix::clear_matrix()
+    void Matrix::FreeMatrix()
     {
-        if (this->_matrix)
+        if (this->_matrix != NULL)
         {
             if (this->_rows && this->_cols)
             {
@@ -64,9 +72,26 @@ namespace ft
                 }
                 delete[] _matrix;
             }
+            _rows = 0;
+            _cols = 0;
+            _matrix = NULL;
         }
     }
 
+    void Matrix::CopyMatrix(const Matrix& other)
+    {
+        for (int i = 0; i < other._rows; i++)
+        {
+            for (int j = 0; j < other._cols; j++)
+            {
+                _matrix[i][j] = other._matrix[i][j];
+            }
+        }
+
+    }
+
+
+    /* Main Functional */
 
     bool Matrix::EqMatrix(const ft::Matrix& other)
     {
@@ -242,7 +267,8 @@ namespace ft
         {
             for (int i = 0; i < this->_cols; i++)
             {
-                minor = MinorMinor(i, 0);  // чтобы не брать [i][0] элемент, то есть первые элементы строки
+                //Matrix minor(MinorMinor(i, 0));  // чтобы не брать [i][0] элемент, то есть первые элементы строки
+                minor = MinorMinor(i, 0);
                 determinant_minor = minor.Determinant();
 
                 determinant_minor = this->_matrix[i][0] * determinant_minor;
@@ -263,18 +289,20 @@ namespace ft
     Matrix  Matrix::CalcComplements()
     {
         Matrix result(_rows, _cols);
+        
 
         if ((_rows != _cols) || _rows < 1 || _cols < 1)
         {
             throw std::out_of_range("Incorrect input");
         }
+    
         for (int i = 0; i < _rows; i++)
         {
             for (int j = 0; j < _cols; j++)
             {
                 double determinant = 0.0;
-                minor = MinorMinor(i, j);
-                determinant = minor.determinant();
+                Matrix minor(MinorMinor(i, j));
+                determinant = minor.Determinant();
                 result._matrix[i][j] = pow(-1, i + j) * determinant;
             }
         }
@@ -283,6 +311,7 @@ namespace ft
 
     Matrix  Matrix::InverseMatrix()
     {
+        
         Matrix  Calc_Complements;
         Matrix  MatrixTranspose;
         Matrix  Result(this->_rows, this->_cols);
@@ -297,16 +326,49 @@ namespace ft
         {
             throw std::logic_error("\ndeterminant value can't be equal to 0\n");
         }
-        Calc_Complements = Matrix.CalcComplements();
+       
+        Calc_Complements = this->CalcComplements();
         MatrixTranspose = Calc_Complements.Transpose();
-
-        for (int i = 0; i < MatrixTranspose->_rows; i++)
+        for (int i = 0; i < MatrixTranspose._rows; i++)
         {
-            for (int j = 0; j < MatrixTranspose->_cols; j++)
+            for (int j = 0; j < MatrixTranspose._cols; j++)
             {
-                Result->_matrix[i][j] = MatrixTranspose->_matrix[i][j] / determinant;
+                Result._matrix[i][j] = MatrixTranspose._matrix[i][j] / determinant;
             }
         }
         return (Result);
     }
+
+    /* Operators */
+
+    Matrix& Matrix::operator=(const Matrix& other)
+    {
+        FreeMatrix();
+        AllocateMatrix(other._rows, other._cols);
+        CopyMatrix(other);
+        return (*this);
+    }
+
+    // Перегрузка оператора индексации
+    // Example: cout << matrix[i][j]
+    double& Matrix::operator()(int i, int j)
+    {
+        if (i < 0 || i >= _rows || j < 0 || j >= _cols)
+        {
+            throw std::out_of_range("Error, index incorrect");
+        }
+        return _matrix[i][j];
+    }
+
+    // Перегрузка оператора индексации
+    double Matrix::operator()(int i, int j) const
+    {
+        
+        if (i < 0 || i >= _rows || j < 0 || j >= _cols)
+        {
+            throw std::out_of_range("Error, index incorrect");
+        }
+        return _matrix[i][j];
+    }
+
 }
