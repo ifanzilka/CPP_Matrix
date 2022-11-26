@@ -35,7 +35,6 @@ namespace ft
         Matrix  MinorMinor(int row, int col);
         double  Determinant();
         Matrix  CalcComplements();
-        
         Matrix  InverseMatrix();
 
 

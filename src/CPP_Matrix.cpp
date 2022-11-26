@@ -260,7 +260,6 @@ namespace ft
     }
 
 
-
     Matrix  Matrix::CalcComplements()
     {
         Matrix result(_rows, _cols);
@@ -280,5 +279,34 @@ namespace ft
             }
         }
         return (result);
+    }
+
+    Matrix  Matrix::InverseMatrix()
+    {
+        Matrix  Calc_Complements;
+        Matrix  MatrixTranspose;
+        Matrix  Result(this->_rows, this->_cols);
+
+        if (_rows != _cols)
+        {
+            throw std::logic_error("\nRows and columns must match\n");
+        }
+        const double determinant = this->Determinant();
+        
+        if (determinant == 0.0) 
+        {
+            throw std::logic_error("\ndeterminant value can't be equal to 0\n");
+        }
+        Calc_Complements = Matrix.CalcComplements();
+        MatrixTranspose = Calc_Complements.Transpose();
+
+        for (int i = 0; i < MatrixTranspose->_rows; i++)
+        {
+            for (int j = 0; j < MatrixTranspose->_cols; j++)
+            {
+                Result->_matrix[i][j] = MatrixTranspose->_matrix[i][j] / determinant;
+            }
+        }
+        return (Result);
     }
 }
