@@ -28,7 +28,7 @@ namespace ft
         //Matrix(Matrix&& other);
 
         /* Finctional */
-        bool    EqMatrix(const ft::Matrix& other);
+        bool    EqMatrix(const Matrix& other) const;
         void    SumMatrix(const Matrix& other);
         void    SubMatrix(const Matrix& other);
         void    MulNumber(const double num);
@@ -41,10 +41,31 @@ namespace ft
         Matrix  InverseMatrix();
 
 
+        /* Сеттеры */
+        void SetRows(int rows);
+        void SetCols(int cols);
+
+        /* Getters */
+        int GetRows() const;
+        int GetCols() const;
+
+
+
+
+
         /* operators  */
 
+        Matrix operator+(const Matrix& other) const;
+        Matrix operator-(const Matrix& other) const;
+        Matrix operator*(const Matrix& other) const;
+        friend Matrix operator*(const double num, const Matrix& other);
+        Matrix operator*(const double num) const;
+        bool operator==(const Matrix& other) const;
+        void operator+=(const Matrix& other);
+        void operator-=(const Matrix& other);
+        void operator*=(const Matrix& other);
+        void operator*=(const double num);
         Matrix& operator=(const Matrix& other);
-
         double& operator()(int i, int j);
         double  operator()(int i, int j) const;
 

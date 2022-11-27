@@ -92,8 +92,7 @@ namespace ft
 
 
     /* Main Functional */
-
-    bool Matrix::EqMatrix(const ft::Matrix& other)
+    bool    Matrix::EqMatrix(const Matrix& other) const
     {
         bool result = true;
         if (this->_rows != other._rows || this->_cols != other._cols)
@@ -339,7 +338,67 @@ namespace ft
         return (Result);
     }
 
+
+    /* Setters */
+
+    void Matrix::SetRows(int rows)
+    {
+        this->_rows = rows;
+    }
+
+    void Matrix::SetCols(int cols)
+    {
+        this->_cols = cols;
+    }
+
+    /* Getters */
+
+    int Matrix::GetRows() const
+    {
+        return (this->_rows);
+    }
+
+    int Matrix::GetCols() const
+    {
+        return (this->_cols);
+    }
+
+
     /* Operators */
+
+    Matrix Matrix::operator+(const Matrix& other) const
+    {
+        Matrix result(*this);
+
+        result.SumMatrix(other);
+        return (result);
+    }
+
+    Matrix Matrix::operator-(const Matrix& other) const
+    {
+        Matrix result(*this);
+
+        result.SubMatrix(other);
+        return (result);
+    }
+
+    Matrix Matrix::operator*(const Matrix& other) const
+    {
+        Matrix result(*this);
+
+        result.MulMatrix(other);
+        return (result);
+    }
+
+    Matrix Matrix::operator*(const double num) const
+    {
+        Matrix result(*this);
+
+        result.MulNumber(num);
+        return (result);
+    }
+
+
 
     Matrix& Matrix::operator=(const Matrix& other)
     {
@@ -348,6 +407,34 @@ namespace ft
         CopyMatrix(other);
         return (*this);
     }
+
+    bool Matrix::operator==(const Matrix& other) const
+    {
+        bool result = this->EqMatrix(other);
+        return (result);
+    }
+
+    void Matrix::operator+=(const Matrix& other)
+    {
+        SumMatrix(other);
+    }
+
+    void Matrix::operator-=(const Matrix& other)
+    {
+        SubMatrix(other);
+    }
+
+    void Matrix::operator*=(const Matrix& other)
+    {
+        MulMatrix(other);
+    }
+
+    void Matrix::operator*=(const double num)
+    {
+        MulNumber(num);
+    }
+
+
 
     // Перегрузка оператора индексации
     // Example: cout << matrix[i][j]

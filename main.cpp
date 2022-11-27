@@ -47,10 +47,12 @@ int main()
     std::cout << A.Determinant() << std::endl;
 
     ft::Matrix obr = A.InverseMatrix();
+    
+    
     print_matrix(obr, 3, 3);
     
-    A.MulMatrix(obr);
-    print_matrix(A, 3, 3);
+    ft::Matrix res = A * obr; 
+    print_matrix(res, 3, 3);
     while (1)
         ;
 
